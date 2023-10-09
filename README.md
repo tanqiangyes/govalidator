@@ -1,8 +1,6 @@
 govalidator
 ===========
-[![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tanqiangyes/govalidator?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![GoDoc](https://godoc.org/github.com/tanqiangyes/govalidator?status.png)](https://godoc.org/github.com/tanqiangyes/govalidator)
-[![Build Status](https://travis-ci.org/tanqiangyes/govalidator.svg?branch=master)](https://travis-ci.org/tanqiangyes/govalidator)
-[![Coverage](https://codecov.io/gh/tanqiangyes/govalidator/branch/master/graph/badge.svg)](https://codecov.io/gh/tanqiangyes/govalidator) [![Go Report Card](https://goreportcard.com/badge/github.com/tanqiangyes/govalidator)](https://goreportcard.com/report/github.com/tanqiangyes/govalidator)[![Backers on Open Collective](https://opencollective.com/govalidator/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/govalidator/sponsors/badge.svg)](#sponsors)
+[![GoDoc](https://godoc.org/github.com/tanqiangyes/govalidator?status.png)](https://godoc.org/github.com/tanqiangyes/govalidator)[![Go Report Card](https://goreportcard.com/badge/github.com/tanqiangyes/govalidator)](https://goreportcard.com/report/github.com/tanqiangyes/govalidator)[![Backers on Open Collective](https://opencollective.com/govalidator/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/govalidator/sponsors/badge.svg)](#sponsors)
 
 A package of validators and sanitizers for strings, structs and collections, based on **Go 1.18+ Generics**. Based on [asaskevich/govalidator](https://github.com/asaskevich/govalidator).
 
@@ -578,45 +576,6 @@ Feel free to create what you want, but keep in mind when you implement new featu
 ### Contributors
 
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-
-#### Special thanks to [contributors](https://github.com/tanqiangyes/govalidator/graphs/contributors)
-* [Daniel Lohse](https://github.com/annismckenzie)
-* [Attila Oláh](https://github.com/attilaolah)
-* [Daniel Korner](https://github.com/Dadie)
-* [Steven Wilkin](https://github.com/stevenwilkin)
-* [Deiwin Sarjas](https://github.com/deiwin)
-* [Noah Shibley](https://github.com/slugmobile)
-* [Nathan Davies](https://github.com/nathj07)
-* [Matt Sanford](https://github.com/mzsanford)
-* [Simon ccl1115](https://github.com/ccl1115)
-
-<a href="https://github.com/tanqiangyes/govalidator/graphs/contributors"><img src="https://opencollective.com/govalidator/contributors.svg?width=890" /></a>
-
-
-### Backers
-
-Thank you to all our backers! 🙏 [[Become a backer](https://opencollective.com/govalidator#backer)]
-
-<a href="https://opencollective.com/govalidator#backers" target="_blank"><img src="https://opencollective.com/govalidator/backers.svg?width=890"></a>
-
-
-### Sponsors
-
-Support this project by becoming a sponsor. Your logo will show up here with a link to your website. [[Become a sponsor](https://opencollective.com/govalidator#sponsor)]
-
-<a href="https://opencollective.com/govalidator/sponsor/0/website" target="_blank"><img src="https://opencollective.com/govalidator/sponsor/0/avatar.svg"></a>
-<a href="https://opencollective.com/govalidator/sponsor/1/website" target="_blank"><img src="https://opencollective.com/govalidator/sponsor/1/avatar.svg"></a>
-<a href="https://opencollective.com/govalidator/sponsor/2/website" target="_blank"><img src="https://opencollective.com/govalidator/sponsor/2/avatar.svg"></a>
-<a href="https://opencollective.com/govalidator/sponsor/3/website" target="_blank"><img src="https://opencollective.com/govalidator/sponsor/3/avatar.svg"></a>
-<a href="https://opencollective.com/govalidator/sponsor/4/website" target="_blank"><img src="https://opencollective.com/govalidator/sponsor/4/avatar.svg"></a>
-<a href="https://opencollective.com/govalidator/sponsor/5/website" target="_blank"><img src="https://opencollective.com/govalidator/sponsor/5/avatar.svg"></a>
-<a href="https://opencollective.com/govalidator/sponsor/6/website" target="_blank"><img src="https://opencollective.com/govalidator/sponsor/6/avatar.svg"></a>
-<a href="https://opencollective.com/govalidator/sponsor/7/website" target="_blank"><img src="https://opencollective.com/govalidator/sponsor/7/avatar.svg"></a>
-<a href="https://opencollective.com/govalidator/sponsor/8/website" target="_blank"><img src="https://opencollective.com/govalidator/sponsor/8/avatar.svg"></a>
-<a href="https://opencollective.com/govalidator/sponsor/9/website" target="_blank"><img src="https://opencollective.com/govalidator/sponsor/9/avatar.svg"></a>
-
-
-
 
 ## License
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ftanqiangyes%2Fgovalidator.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Ftanqiangyes%2Fgovalidator?ref=badge_large)
