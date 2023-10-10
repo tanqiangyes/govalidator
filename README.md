@@ -4,7 +4,7 @@ govalidator
 [![Build Status](https://travis-ci.org/tanqiangyes/govalidator.svg?branch=master)](https://travis-ci.org/tanqiangyes/govalidator)
 [![Coverage](https://codecov.io/gh/tanqiangyes/govalidator/branch/master/graph/badge.svg)](https://codecov.io/gh/tanqiangyes/govalidator) [![Go Report Card](https://goreportcard.com/badge/github.com/tanqiangyes/govalidator)](https://goreportcard.com/report/github.com/tanqiangyes/govalidator)[![Backers on Open Collective](https://opencollective.com/govalidator/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/govalidator/sponsors/badge.svg)](#sponsors)
 
-A package of validators and sanitizers for strings, structs and collections. Based on [asaskevich/govalidator](https://github.com/asaskevich/govalidator).
+A package of validators and sanitizers for strings, structs and collections, based on **Go 1.18+ Generics**. Based on [asaskevich/govalidator](https://github.com/asaskevich/govalidator).
 
 #### Installation
 Make sure that Go is installed on your computer.
