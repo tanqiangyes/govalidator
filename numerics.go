@@ -2,7 +2,6 @@ package govalidator
 
 import (
 	"math"
-	"reflect"
 
 	"golang.org/x/exp/constraints"
 )
@@ -74,19 +73,7 @@ func InRangeFloat64(value, left, right float64) bool {
 // All types must the same type.
 // False if value doesn't lie in range or if it incompatible or not comparable
 func InRange[V constraints.Ordered](value V, left V, right V) bool {
-	v := reflect.ValueOf(value)
-	switch v.Kind() {
-	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int64, reflect.Int32,
-		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint64, reflect.Uint32, reflect.Float64, reflect.Float32:
-		if left > right {
-			left, right = right, left
-		}
-		return value >= left && value <= right
-	case reflect.String:
-		return value >= left && value <= right
-	default:
-		return false
-	}
+	return value >= left && value <= right
 }
 
 // IsWhole returns true if value is whole number
