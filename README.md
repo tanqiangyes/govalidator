@@ -2,9 +2,9 @@ govalidator
 ===========
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/tanqiangyes/govalidator?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![GoDoc](https://godoc.org/github.com/tanqiangyes/govalidator?status.png)](https://godoc.org/github.com/tanqiangyes/govalidator)
 [![Build Status](https://travis-ci.org/tanqiangyes/govalidator.svg?branch=master)](https://travis-ci.org/tanqiangyes/govalidator)
-[![Coverage](https://codecov.io/gh/tanqiangyes/govalidator/branch/master/graph/badge.svg)](https://codecov.io/gh/tanqiangyes/govalidator) [![Go Report Card](https://goreportcard.com/badge/github.com/tanqiangyes/govalidator)](https://goreportcard.com/report/github.com/tanqiangyes/govalidator) [![GoSearch](http://go-search.org/badge?id=github.com%2Ftanqiangyes%2Fgovalidator)](http://go-search.org/view?id=github.com%2Ftanqiangyes%2Fgovalidator) [![Backers on Open Collective](https://opencollective.com/govalidator/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/govalidator/sponsors/badge.svg)](#sponsors) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Ftanqiangyes%2Fgovalidator.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Ftanqiangyes%2Fgovalidator?ref=badge_shield)
+[![Coverage](https://codecov.io/gh/tanqiangyes/govalidator/branch/master/graph/badge.svg)](https://codecov.io/gh/tanqiangyes/govalidator) [![Go Report Card](https://goreportcard.com/badge/github.com/tanqiangyes/govalidator)](https://goreportcard.com/report/github.com/tanqiangyes/govalidator)[![Backers on Open Collective](https://opencollective.com/govalidator/backers/badge.svg)](#backers) [![Sponsors on Open Collective](https://opencollective.com/govalidator/sponsors/badge.svg)](#sponsors)
 
-A package of validators and sanitizers for strings, structs and collections. Based on [validator.js](https://github.com/chriso/validator.js).
+A package of validators and sanitizers for strings, structs and collections. Based on [asaskevich/govalidator](https://github.com/asaskevich/govalidator).
 
 #### Installation
 Make sure that Go is installed on your computer.
