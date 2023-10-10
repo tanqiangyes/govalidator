@@ -33,6 +33,17 @@ func BenchmarkEach(b *testing.B) {
 	}
 }
 
+func BenchmarkReduce(b *testing.B) {
+	data := randomArray(1000000)
+	b.ResetTimer()
+	for n := 0; n < b.N; n++ {
+		var fn ReduceIterator[int] = func(init int, val int) int {
+			return init + val
+		}
+		Reduce(data, fn, 0)
+	}
+}
+
 func BenchmarkMap(b *testing.B) {
 	data := randomArray(1000000)
 	b.ResetTimer()

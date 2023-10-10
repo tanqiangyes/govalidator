@@ -16,6 +16,19 @@ func TestEach(t *testing.T) {
 	}
 }
 
+func TestReduce(t *testing.T) {
+	// TODO Maybe refactor?
+	t.Parallel()
+	data := []int{1, 2, 3, 4, 5}
+	var fn ReduceIterator[int] = func(init int, val int) int {
+		return init + val
+	}
+	acc := Reduce(data, fn, 0)
+	if acc != 15 {
+		t.Errorf("Expected Each(..) to be %v, got %v", 15, acc)
+	}
+}
+
 func TestMap(t *testing.T) {
 	// TODO Maybe refactor?
 	t.Parallel()
