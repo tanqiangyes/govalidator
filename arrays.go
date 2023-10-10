@@ -1,19 +1,19 @@
 package govalidator
 
 // Iterator is the function that accepts element of slice/array and its index
-type Iterator func(interface{}, int)
+type Iterator[T any] func(T, int)
 
 // ResultIterator is the function that accepts element of slice/array and its index and returns any result
-type ResultIterator func(interface{}, int) interface{}
+type ResultIterator[T any] func(T, int) T
 
 // ConditionIterator is the function that accepts element of slice/array and its index and returns boolean
-type ConditionIterator func(interface{}, int) bool
+type ConditionIterator[T any] func(T, int) bool
 
 // ReduceIterator is the function that accepts two element of slice/array and returns result of merging those values
-type ReduceIterator func(interface{}, interface{}) interface{}
+type ReduceIterator[T any] func(T, T) T
 
 // Some validates that any item of array corresponds to ConditionIterator. Returns boolean.
-func Some(array []interface{}, iterator ConditionIterator) bool {
+func Some[T any](array []T, iterator ConditionIterator[T]) bool {
 	res := false
 	for index, data := range array {
 		res = res || iterator(data, index)
@@ -22,7 +22,7 @@ func Some(array []interface{}, iterator ConditionIterator) bool {
 }
 
 // Every validates that every item of array corresponds to ConditionIterator. Returns boolean.
-func Every(array []interface{}, iterator ConditionIterator) bool {
+func Every[T any](array []T, iterator ConditionIterator[T]) bool {
 	res := true
 	for index, data := range array {
 		res = res && iterator(data, index)
@@ -31,7 +31,7 @@ func Every(array []interface{}, iterator ConditionIterator) bool {
 }
 
 // Reduce boils down a list of values into a single value by ReduceIterator
-func Reduce(array []interface{}, iterator ReduceIterator, initialValue interface{}) interface{} {
+func Reduce[T any](array []T, iterator ReduceIterator[T], initialValue T) T {
 	for _, data := range array {
 		initialValue = iterator(initialValue, data)
 	}
@@ -39,15 +39,15 @@ func Reduce(array []interface{}, iterator ReduceIterator, initialValue interface
 }
 
 // Each iterates over the slice and apply Iterator to every item
-func Each(array []interface{}, iterator Iterator) {
+func Each[T any](array []T, iterator Iterator[T]) {
 	for index, data := range array {
 		iterator(data, index)
 	}
 }
 
 // Map iterates over the slice and apply ResultIterator to every item. Returns new slice as a result.
-func Map(array []interface{}, iterator ResultIterator) []interface{} {
-	var result = make([]interface{}, len(array))
+func Map[T any](array []T, iterator ResultIterator[T]) []T {
+	var result = make([]T, len(array))
 	for index, data := range array {
 		result[index] = iterator(data, index)
 	}
@@ -55,18 +55,18 @@ func Map(array []interface{}, iterator ResultIterator) []interface{} {
 }
 
 // Find iterates over the slice and apply ConditionIterator to every item. Returns first item that meet ConditionIterator or nil otherwise.
-func Find(array []interface{}, iterator ConditionIterator) interface{} {
+func Find[T any](array []T, iterator ConditionIterator[T]) (t T) {
 	for index, data := range array {
 		if iterator(data, index) {
 			return data
 		}
 	}
-	return nil
+	return
 }
 
 // Filter iterates over the slice and apply ConditionIterator to every item. Returns new slice.
-func Filter(array []interface{}, iterator ConditionIterator) []interface{} {
-	var result = make([]interface{}, 0)
+func Filter[T any](array []T, iterator ConditionIterator[T]) []T {
+	var result = make([]T, 0)
 	for index, data := range array {
 		if iterator(data, index) {
 			result = append(result, data)
@@ -76,7 +76,7 @@ func Filter(array []interface{}, iterator ConditionIterator) []interface{} {
 }
 
 // Count iterates over the slice and apply ConditionIterator to every item. Returns count of items that meets ConditionIterator.
-func Count(array []interface{}, iterator ConditionIterator) int {
+func Count[T any](array []T, iterator ConditionIterator[T]) int {
 	count := 0
 	for index, data := range array {
 		if iterator(data, index) {

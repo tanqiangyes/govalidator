@@ -31,31 +31,40 @@ var (
 )
 
 const maxURLRuneCount = 2083
+
 const minURLRuneCount = 3
+
 const rfc3339WithoutZone = "2006-01-02T15:04:05"
 
 // SetFieldsRequiredByDefault causes validation to fail when struct fields
 // do not include validations or are not explicitly marked as exempt (using `valid:"-"` or `valid:"email,optional"`).
 // This struct definition will fail govalidator.ValidateStruct() (and the field values do not matter):
-//     type exampleStruct struct {
-//         Name  string ``
-//         Email string `valid:"email"`
+//
+//	type exampleStruct struct {
+//	    Name  string ``
+//	    Email string `valid:"email"`
+//
 // This, however, will only fail when Email is empty or an invalid email address:
-//     type exampleStruct2 struct {
-//         Name  string `valid:"-"`
-//         Email string `valid:"email"`
+//
+//	type exampleStruct2 struct {
+//	    Name  string `valid:"-"`
+//	    Email string `valid:"email"`
+//
 // Lastly, this will only fail when Email is an invalid email address but not when it's empty:
-//     type exampleStruct2 struct {
-//         Name  string `valid:"-"`
-//         Email string `valid:"email,optional"`
+//
+//	type exampleStruct2 struct {
+//	    Name  string `valid:"-"`
+//	    Email string `valid:"email,optional"`
 func SetFieldsRequiredByDefault(value bool) {
 	fieldsRequiredByDefault = value
 }
 
 // SetNilPtrAllowedByRequired causes validation to pass for nil ptrs when a field is set to required.
 // The validation will still reject ptr fields in their zero value state. Example with this enabled:
-//     type exampleStruct struct {
-//         Name  *string `valid:"required"`
+//
+//	type exampleStruct struct {
+//	    Name  *string `valid:"required"`
+//
 // With `Name` set to "", this will be considered invalid input and will cause a validation error.
 // With `Name` set to nil, this will be considered valid by validation.
 // By default this is disabled.
@@ -130,10 +139,10 @@ func IsURL(str string) bool {
 func IsRequestURL(rawurl string) bool {
 	url, err := url.ParseRequestURI(rawurl)
 	if err != nil {
-		return false //Couldn't even parse the rawurl
+		return false // Couldn't even parse the rawurl
 	}
 	if len(url.Scheme) == 0 {
-		return false //No Scheme found
+		return false // No Scheme found
 	}
 	return true
 }
@@ -154,8 +163,8 @@ func IsAlpha(str string) bool {
 	return rxAlpha.MatchString(str)
 }
 
-//IsUTFLetter checks if the string contains only unicode letter characters.
-//Similar to IsAlpha but for all languages. Empty string is valid.
+// IsUTFLetter checks if the string contains only unicode letter characters.
+// Similar to IsAlpha but for all languages. Empty string is valid.
 func IsUTFLetter(str string) bool {
 	if IsNull(str) {
 		return true
@@ -184,7 +193,7 @@ func IsUTFLetterNumeric(str string) bool {
 		return true
 	}
 	for _, c := range str {
-		if !unicode.IsLetter(c) && !unicode.IsNumber(c) { //letters && numbers are ok
+		if !unicode.IsLetter(c) && !unicode.IsNumber(c) { // letters && numbers are ok
 			return false
 		}
 	}
@@ -214,7 +223,7 @@ func IsUTFNumeric(str string) bool {
 		str = strings.TrimPrefix(str, "+")
 	}
 	for _, c := range str {
-		if !unicode.IsNumber(c) { //numbers && minus sign are ok
+		if !unicode.IsNumber(c) { // numbers && minus sign are ok
 			return false
 		}
 	}
@@ -235,7 +244,7 @@ func IsUTFDigit(str string) bool {
 		str = strings.TrimPrefix(str, "+")
 	}
 	for _, c := range str {
-		if !unicode.IsDigit(c) { //digits && minus sign are ok
+		if !unicode.IsDigit(c) { // digits && minus sign are ok
 			return false
 		}
 	}
@@ -398,8 +407,8 @@ const ulidEncodedSize = 26
 // IsULID checks if the string is a ULID.
 //
 // Implementation got from:
-//   https://github.com/oklog/ulid (Apache-2.0 License)
 //
+//	https://github.com/oklog/ulid (Apache-2.0 License)
 func IsULID(str string) bool {
 	// Check if a base32 encoded ULID is the right length.
 	if len(str) != ulidEncodedSize {
@@ -454,26 +463,26 @@ func IsCreditCard(str string) bool {
 	if !rxCreditCard.MatchString(sanitized) {
 		return false
 	}
-	
+
 	number, _ := ToInt(sanitized)
-	number, lastDigit := number / 10, number % 10	
+	number, lastDigit := number/10, number%10
 
 	var sum int64
-	for i:=0; number > 0; i++ {
+	for i := 0; number > 0; i++ {
 		digit := number % 10
-		
-		if i % 2 == 0 {
+
+		if i%2 == 0 {
 			digit *= 2
 			if digit > 9 {
 				digit -= 9
 			}
 		}
-		
+
 		sum += digit
 		number = number / 10
 	}
-	
-	return (sum + lastDigit) % 10 == 0
+
+	return (sum+lastDigit)%10 == 0
 }
 
 // IsISBN10 checks if the string is an ISBN version 10.
@@ -583,7 +592,7 @@ func IsBase64(str string) bool {
 // IsFilePath checks is a string is Win or Unix file path and returns it's type.
 func IsFilePath(str string) (bool, int) {
 	if rxWinPath.MatchString(str) {
-		//check windows path limit see:
+		// check windows path limit see:
 		//  http://msdn.microsoft.com/en-us/library/aa365247(VS.85).aspx#maxpath
 		if len(str[3:]) > 32767 {
 			return false, Win
@@ -595,10 +604,10 @@ func IsFilePath(str string) (bool, int) {
 	return false, Unknown
 }
 
-//IsWinFilePath checks both relative & absolute paths in Windows
+// IsWinFilePath checks both relative & absolute paths in Windows
 func IsWinFilePath(str string) bool {
 	if rxARWinPath.MatchString(str) {
-		//check windows path limit see:
+		// check windows path limit see:
 		//  http://msdn.microsoft.com/en-us/library/aa365247(VS.85).aspx#maxpath
 		if len(str[3:]) > 32767 {
 			return false
@@ -608,7 +617,7 @@ func IsWinFilePath(str string) bool {
 	return false
 }
 
-//IsUnixFilePath checks both relative & absolute paths in Unix
+// IsUnixFilePath checks both relative & absolute paths in Unix
 func IsUnixFilePath(str string) bool {
 	if rxARUnixPath.MatchString(str) {
 		return true
@@ -992,15 +1001,16 @@ func prependPathToErrors(err error, path string) error {
 }
 
 // ValidateArray performs validation according to condition iterator that validates every element of the array
-func ValidateArray(array []interface{}, iterator ConditionIterator) bool {
-	return Every(array, iterator)
+func ValidateArray[T any](array []T, iterator ConditionIterator[T]) bool {
+	return Every[T](array, iterator)
 }
 
 // ValidateMap use validation map for fields.
 // result will be equal to `false` if there are any errors.
 // s is the map containing the data to be validated.
 // m is the validation map in the form:
-//   map[string]interface{}{"name":"required,alpha","address":map[string]interface{}{"line1":"required,alphanum"}}
+//
+//	map[string]interface{}{"name":"required,alpha","address":map[string]interface{}{"line1":"required,alphanum"}}
 func ValidateMap(s map[string]interface{}, m map[string]interface{}) (bool, error) {
 	if s == nil {
 		return true, nil
@@ -1621,7 +1631,7 @@ func typeCheck(v reflect.Value, t reflect.StructField, o reflect.Value, options 
 						return false, Error{t.Name, fmt.Errorf("%s does not validate as %s", field, validator), customMsgExists, stripParams(validatorSpec), []string{}}
 					}
 				default:
-					//Not Yet Supported Types (Fail here!)
+					// Not Yet Supported Types (Fail here!)
 					err := fmt.Errorf("Validator %s doesn't support kind %s for value %v", validator, v.Kind(), v)
 					return false, Error{t.Name, err, false, stripParams(validatorSpec), []string{}}
 				}
@@ -1758,10 +1768,13 @@ func (e *UnsupportedTypeError) Error() string {
 	return "validator: unsupported type: " + e.Type.String()
 }
 
-func (sv stringValues) Len() int           { return len(sv) }
-func (sv stringValues) Swap(i, j int)      { sv[i], sv[j] = sv[j], sv[i] }
+func (sv stringValues) Len() int { return len(sv) }
+
+func (sv stringValues) Swap(i, j int) { sv[i], sv[j] = sv[j], sv[i] }
+
 func (sv stringValues) Less(i, j int) bool { return sv.get(i) < sv.get(j) }
-func (sv stringValues) get(i int) string   { return sv[i].String() }
+
+func (sv stringValues) get(i int) string { return sv[i].String() }
 
 func IsE164(str string) bool {
 	return rxE164.MatchString(str)

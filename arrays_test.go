@@ -7,7 +7,7 @@ func TestEach(t *testing.T) {
 	t.Parallel()
 	acc := 0
 	data := []interface{}{1, 2, 3, 4, 5}
-	var fn Iterator = func(value interface{}, index int) {
+	var fn Iterator[any] = func(value interface{}, index int) {
 		acc = acc + value.(int)
 	}
 	Each(data, fn)
@@ -20,7 +20,7 @@ func TestMap(t *testing.T) {
 	// TODO Maybe refactor?
 	t.Parallel()
 	data := []interface{}{1, 2, 3, 4, 5}
-	var fn ResultIterator = func(value interface{}, index int) interface{} {
+	var fn ResultIterator[any] = func(value interface{}, index int) interface{} {
 		return value.(int) * 3
 	}
 	result := Map(data, fn)
@@ -36,10 +36,10 @@ func TestFind(t *testing.T) {
 	t.Parallel()
 	findElement := 96
 	data := []interface{}{1, 2, 3, 4, findElement, 5}
-	var fn1 ConditionIterator = func(value interface{}, index int) bool {
+	var fn1 ConditionIterator[any] = func(value interface{}, index int) bool {
 		return value.(int) == findElement
 	}
-	var fn2 ConditionIterator = func(value interface{}, index int) bool {
+	var fn2 ConditionIterator[any] = func(value interface{}, index int) bool {
 		value, _ = value.(string)
 		return value == "govalidator"
 	}
@@ -58,7 +58,7 @@ func TestFilter(t *testing.T) {
 	t.Parallel()
 	data := []interface{}{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 	answer := []interface{}{2, 4, 6, 8, 10}
-	var fn ConditionIterator = func(value interface{}, index int) bool {
+	var fn ConditionIterator[any] = func(value interface{}, index int) bool {
 		return value.(int)%2 == 0
 	}
 	result := Filter(data, fn)
@@ -74,7 +74,7 @@ func TestCount(t *testing.T) {
 	t.Parallel()
 	data := []interface{}{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
 	count := 5
-	var fn ConditionIterator = func(value interface{}, index int) bool {
+	var fn ConditionIterator[any] = func(value interface{}, index int) bool {
 		return value.(int)%2 == 0
 	}
 	result := Count(data, fn)
