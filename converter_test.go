@@ -44,14 +44,14 @@ func TestToString(t *testing.T) {
 	toString(t, true, "true")
 	toString(t, 1.5+10i, "(1.5+10i)")
 	// Sprintf function not guarantee that maps with equal keys always will be equal in string  representation
-	//toString(t, struct{ Keys map[int]int }{Keys: map[int]int{1: 2, 3: 4}}, "{map[1:2 3:4]}")
+	// toString(t, struct{ Keys map[int]int }{Keys: map[int]int{1: 2, 3: 4}}, "{map[1:2 3:4]}")
 }
 
 func TestToFloat(t *testing.T) {
 	tests := []string{"", "123", "-.01", "10.", "string", "1.23e3", ".23e10"}
 	expected := []float64{0, 123, -0.01, 10.0, 0, 1230, 0.23e10}
 	for i := 0; i < len(tests); i++ {
-		res, _ := ToFloat(tests[i])
+		res, _ := ToNumber[string, float64](tests[i])
 		if res != expected[i] {
 			t.Log("Case ", i, ": expected ", expected[i], " when result is ", res)
 			t.FailNow()

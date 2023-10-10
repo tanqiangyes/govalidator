@@ -5,16 +5,18 @@ import (
 	"fmt"
 	"reflect"
 	"strconv"
+
+	"golang.org/x/exp/constraints"
 )
 
 // ToString convert the input to a string.
-func ToString(obj interface{}) string {
+func ToString[T any](obj T) string {
 	res := fmt.Sprintf("%v", obj)
 	return res
 }
 
 // ToJSON convert the input to a valid JSON string
-func ToJSON(obj interface{}) (string, error) {
+func ToJSON[T any](obj T) (string, error) {
 	res, err := json.Marshal(obj)
 	if err != nil {
 		res = []byte("")
@@ -22,22 +24,32 @@ func ToJSON(obj interface{}) (string, error) {
 	return string(res), err
 }
 
-// ToFloat convert the input string to a float, or 0.0 if the input is not a float.
-func ToFloat(value interface{}) (res float64, err error) {
+// ToNumber convert the input string to a number, or 0.0 if the input is not a number.
+func ToNumber[T any, U constraints.Float | constraints.Integer](value T) (res U, err error) {
 	val := reflect.ValueOf(value)
 
-	switch value.(type) {
-	case int, int8, int16, int32, int64:
-		res = float64(val.Int())
-	case uint, uint8, uint16, uint32, uint64:
-		res = float64(val.Uint())
-	case float32, float64:
-		res = val.Float()
-	case string:
-		res, err = strconv.ParseFloat(val.String(), 64)
-		if err != nil {
+	switch val.Kind() {
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		res = U(val.Int())
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+		res = U(val.Uint())
+	case reflect.Float32, reflect.Float64:
+		res = U(val.Float())
+	case reflect.String:
+		if IsInt(val.String()) {
+			resInt, err := strconv.ParseInt(val.String(), 0, 64)
+			if err != nil {
+				res = 0
+			} else {
+				res = U(resInt)
+			}
+		} else if resFloat, err := strconv.ParseFloat(val.String(), 64); err == nil {
+			res = U(resFloat)
+		} else {
+			err = fmt.Errorf("ToInt: invalid numeric format %v", value)
 			res = 0
 		}
+
 	default:
 		err = fmt.Errorf("ToInt: unknown interface type %T", value)
 		res = 0
@@ -47,35 +59,11 @@ func ToFloat(value interface{}) (res float64, err error) {
 }
 
 // ToInt convert the input string or any int type to an integer type 64, or 0 if the input is not an integer.
-func ToInt(value interface{}) (res int64, err error) {
-	val := reflect.ValueOf(value)
-
-	switch value.(type) {
-	case int, int8, int16, int32, int64:
-		res = val.Int()
-	case uint, uint8, uint16, uint32, uint64:
-		res = int64(val.Uint())
-	case float32, float64:
-		res = int64(val.Float())
-	case string:
-		if IsInt(val.String()) {
-			res, err = strconv.ParseInt(val.String(), 0, 64)
-			if err != nil {
-				res = 0
-			}
-		} else {
-			err = fmt.Errorf("ToInt: invalid numeric format %g", value)
-			res = 0
-		}
-	default:
-		err = fmt.Errorf("ToInt: unknown interface type %T", value)
-		res = 0
-	}
-
-	return
+func ToInt[T any](value T) (res int64, err error) {
+	return ToNumber[any, int64](value)
 }
 
 // ToBoolean convert the input string to a boolean.
-func ToBoolean(str string) (bool, error) {
-	return strconv.ParseBool(str)
+func ToBoolean[T ~string](str T) (bool, error) {
+	return strconv.ParseBool(string(str))
 }

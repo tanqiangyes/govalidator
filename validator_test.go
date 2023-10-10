@@ -3143,9 +3143,13 @@ func TestValidateStruct(t *testing.T) {
 }
 
 type testByteArray [8]byte
+
 type testByteMap map[byte]byte
+
 type testByteSlice []byte
+
 type testStringStringMap map[string]string
+
 type testStringIntMap map[string]int
 
 func TestRequired(t *testing.T) {

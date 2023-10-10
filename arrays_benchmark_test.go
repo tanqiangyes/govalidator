@@ -11,8 +11,8 @@ func randomInt(min, max int) int {
 	return min + rand.Intn(max-min)
 }
 
-func randomArray(n int) (res []interface{}) {
-	res = make([]interface{}, n)
+func randomArray(n int) (res []int) {
+	res = make([]int, n)
 
 	for i := 0; i < n; i++ {
 		res[i] = randomInt(-1000, 1000)
@@ -26,8 +26,8 @@ func BenchmarkEach(b *testing.B) {
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
 		acc := 0
-		var fn Iterator[any] = func(value interface{}, index int) {
-			acc = acc + value.(int)
+		var fn Iterator[int] = func(value int, index int) {
+			acc = acc + value
 		}
 		Each(data, fn)
 	}
@@ -37,8 +37,8 @@ func BenchmarkMap(b *testing.B) {
 	data := randomArray(1000000)
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		var fn ResultIterator[any] = func(value interface{}, index int) interface{} {
-			return value.(int) * 3
+		var fn ResultIterator[int] = func(value int, index int) int {
+			return value * 3
 		}
 		_ = Map(data, fn)
 	}
@@ -49,8 +49,8 @@ func BenchmarkFind(b *testing.B) {
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
 		findElement := 96
-		var fn1 ConditionIterator[any] = func(value interface{}, index int) bool {
-			return value.(int) == findElement
+		var fn1 ConditionIterator[int] = func(value int, index int) bool {
+			return value == findElement
 		}
 		_ = Find(data, fn1)
 	}
@@ -60,8 +60,8 @@ func BenchmarkFilter(b *testing.B) {
 	data := randomArray(1000000)
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		var fn ConditionIterator[any] = func(value interface{}, index int) bool {
-			return value.(int)%2 == 0
+		var fn ConditionIterator[int] = func(value int, index int) bool {
+			return value%2 == 0
 		}
 		_ = Filter(data, fn)
 	}
@@ -71,8 +71,8 @@ func BenchmarkCount(b *testing.B) {
 	data := randomArray(1000000)
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		var fn ConditionIterator[any] = func(value interface{}, index int) bool {
-			return value.(int)%2 == 0
+		var fn ConditionIterator[int] = func(value int, index int) bool {
+			return value%2 == 0
 		}
 		_ = Count(data, fn)
 	}

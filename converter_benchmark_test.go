@@ -20,11 +20,11 @@ func BenchmarkToInt(b *testing.B) {
 	}
 }
 
-func BenchmarkToFloat(b *testing.B) {
+func BenchmarkToNumber(b *testing.B) {
 	b.ResetTimer()
 
 	for n := 0; n < b.N; n++ {
-		_, _ = ToFloat("-22342342.2342")
+		_, _ = ToNumber[string, float64]("-22342342.2342")
 	}
 }
 

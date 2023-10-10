@@ -8,6 +8,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"encoding/pem"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net"
@@ -316,7 +317,7 @@ func IsFloat(str string) bool {
 // If second argument is not valid integer or zero, it's return false.
 // Otherwise, if first argument is not valid integer or zero, it's return true (Invalid string converts to zero).
 func IsDivisibleBy(str, num string) bool {
-	f, _ := ToFloat(str)
+	f, _ := ToNumber[string, float64](str)
 	p := int64(f)
 	q, _ := ToInt(num)
 	if q == 0 {
@@ -691,30 +692,30 @@ func IsDNSName(str string) bool {
 // IsHash checks if a string is a hash of type algorithm.
 // Algorithm is one of ['md4', 'md5', 'sha1', 'sha256', 'sha384', 'sha512', 'ripemd128', 'ripemd160', 'tiger128', 'tiger160', 'tiger192', 'crc32', 'crc32b']
 func IsHash(str string, algorithm string) bool {
-	var len string
+	var lens string
 	algo := strings.ToLower(algorithm)
 
 	if algo == "crc32" || algo == "crc32b" {
-		len = "8"
+		lens = "8"
 	} else if algo == "md5" || algo == "md4" || algo == "ripemd128" || algo == "tiger128" {
-		len = "32"
+		lens = "32"
 	} else if algo == "sha1" || algo == "ripemd160" || algo == "tiger160" {
-		len = "40"
+		lens = "40"
 	} else if algo == "tiger192" {
-		len = "48"
+		lens = "48"
 	} else if algo == "sha3-224" {
-		len = "56"
+		lens = "56"
 	} else if algo == "sha256" || algo == "sha3-256" {
-		len = "64"
+		lens = "64"
 	} else if algo == "sha384" || algo == "sha3-384" {
-		len = "96"
+		lens = "96"
 	} else if algo == "sha512" || algo == "sha3-512" {
-		len = "128"
+		lens = "128"
 	} else {
 		return false
 	}
 
-	return Matches(str, "^[a-f0-9]{"+len+"}$")
+	return Matches(str, "^[a-f0-9]{"+lens+"}$")
 }
 
 // IsSHA3224 checks is a string is a SHA3-224 hash. Alias for `IsHash(str, "sha3-224")`
@@ -1160,8 +1161,8 @@ func ValidateStruct(s interface{}) (bool, error) {
 					err2 = jsonError
 				case Errors:
 					for i2, err3 := range jsonError {
-						switch customErr := err3.(type) {
-						case Error:
+						var customErr Error
+						if errors.As(err3, &customErr) {
 							customErr.Name = jsonTag
 							jsonError[i2] = customErr
 						}
@@ -1335,8 +1336,8 @@ func RuneLength(str string, params ...string) bool {
 // Alias for IsRsaPublicKey
 func IsRsaPub(str string, params ...string) bool {
 	if len(params) == 1 {
-		len, _ := ToInt(params[0])
-		return IsRsaPublicKey(str, int(len))
+		lens, _ := ToInt(params[0])
+		return IsRsaPublicKey(str, int(lens))
 	}
 
 	return false
@@ -1391,9 +1392,9 @@ func MaxStringLength(str string, params ...string) bool {
 // Range checks string's length
 func Range(str string, params ...string) bool {
 	if len(params) == 2 {
-		value, _ := ToFloat(str)
-		min, _ := ToFloat(params[0])
-		max, _ := ToFloat(params[1])
+		value, _ := ToNumber[string, float64](str)
+		min, _ := ToNumber[string, float64](params[0])
+		max, _ := ToNumber[string, float64](params[1])
 		return InRange(value, min, max)
 	}
 
@@ -1444,6 +1445,7 @@ func checkRequired(v reflect.Value, t reflect.StructField, options tagOptionsMap
 	return true, nil
 }
 
+// revive:disable
 func typeCheck(v reflect.Value, t reflect.StructField, o reflect.Value, options tagOptionsMap) (isValid bool, resultErr error) {
 	if !v.IsValid() {
 		return false, nil

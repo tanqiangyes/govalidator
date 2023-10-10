@@ -17,9 +17,8 @@ func Sign[V constraints.Integer | constraints.Float](value V) float64 {
 		return 1
 	} else if value < 0 {
 		return -1
-	} else {
-		return 0
 	}
+	return 0
 }
 
 // IsNegative returns true if value < 0
