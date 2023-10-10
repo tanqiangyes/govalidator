@@ -2,6 +2,9 @@ package govalidator
 
 import (
 	"math"
+	"reflect"
+
+	"golang.org/x/exp/constraints"
 )
 
 // Abs returns absolute value of number
@@ -70,20 +73,17 @@ func InRangeFloat64(value, left, right float64) bool {
 // InRange returns true if value lies between left and right border, generic type to handle int, float32, float64 and string.
 // All types must the same type.
 // False if value doesn't lie in range or if it incompatible or not comparable
-func InRange(value interface{}, left interface{}, right interface{}) bool {
-	switch value.(type) {
-	case int:
-		intValue, _ := ToInt(value)
-		intLeft, _ := ToInt(left)
-		intRight, _ := ToInt(right)
-		return InRangeInt(intValue, intLeft, intRight)
-	case float32, float64:
-		intValue, _ := ToFloat(value)
-		intLeft, _ := ToFloat(left)
-		intRight, _ := ToFloat(right)
-		return InRangeFloat64(intValue, intLeft, intRight)
-	case string:
-		return value.(string) >= left.(string) && value.(string) <= right.(string)
+func InRange[V constraints.Ordered](value V, left V, right V) bool {
+	v := reflect.ValueOf(value)
+	switch v.Kind() {
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int64, reflect.Int32,
+		reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint64, reflect.Uint32, reflect.Float64, reflect.Float32:
+		if left > right {
+			left, right = right, left
+		}
+		return value >= left && value <= right
+	case reflect.String:
+		return value >= left && value <= right
 	default:
 		return false
 	}
