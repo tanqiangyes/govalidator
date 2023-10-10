@@ -54,23 +54,15 @@ func BenchmarkInRangeInt(b *testing.B) {
 	b.ResetTimer()
 
 	for n := 0; n < b.N; n++ {
-		_ = InRangeInt(10, -100, 100)
+		_ = InRange(5, 1, 10)
 	}
 }
 
-func BenchmarkInRangeFloat32(b *testing.B) {
+func BenchmarkInRangeFloat(b *testing.B) {
 	b.ResetTimer()
 
 	for n := 0; n < b.N; n++ {
-		_ = InRangeFloat32(10, -100, 100)
-	}
-}
-
-func BenchmarkInRangeFloat64(b *testing.B) {
-	b.ResetTimer()
-
-	for n := 0; n < b.N; n++ {
-		_ = InRangeFloat64(10, -100, 100)
+		_ = InRange(0.5, 0.1, 1.0)
 	}
 }
 
