@@ -17,7 +17,7 @@ func ExampleToInt() {
 	_, _ = ToInt("false") // 0, error
 }
 
-func ExampleToFloat() {
+func ExampleToNumber() {
 	_, _ = ToNumber[string, float64]("-124.2e123") // -124.2e123, nil
 	_, _ = ToNumber[string, float64]("false")      // 0, error
 }

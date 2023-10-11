@@ -37,13 +37,13 @@ func ToNumber[T any, U constraints.Float | constraints.Integer](value T) (res U,
 		res = U(val.Float())
 	case reflect.String:
 		if IsInt[string](val.String()) {
-			resInt, err := strconv.ParseInt(val.String(), 0, 64)
-			if err != nil {
+			resInt, err1 := strconv.ParseInt(val.String(), 0, 64)
+			if err1 != nil {
 				res = 0
 			} else {
 				res = U(resInt)
 			}
-		} else if resFloat, err := strconv.ParseFloat(val.String(), 64); err == nil {
+		} else if resFloat, err1 := strconv.ParseFloat(val.String(), 64); err1 == nil {
 			res = U(resFloat)
 		} else {
 			err = fmt.Errorf("ToInt: invalid numeric format %v", value)
