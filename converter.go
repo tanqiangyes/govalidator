@@ -36,7 +36,7 @@ func ToNumber[T any, U constraints.Float | constraints.Integer](value T) (res U,
 	case reflect.Float32, reflect.Float64:
 		res = U(val.Float())
 	case reflect.String:
-		if IsInt(val.String()) {
+		if IsInt[string](val.String()) {
 			resInt, err := strconv.ParseInt(val.String(), 0, 64)
 			if err != nil {
 				res = 0

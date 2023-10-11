@@ -8,17 +8,17 @@ import (
 )
 
 // Validator is a wrapper for a validator function that returns bool and accepts string.
-type Validator func(str string) bool
+type Validator[T ~string] func(str T) bool
 
 // CustomTypeValidator is a wrapper for validator functions that returns bool and accepts any type.
 // The second parameter should be the context (in the case of validating a struct: the whole object being validated).
-type CustomTypeValidator func(i interface{}, o interface{}) bool
+type CustomTypeValidator[T any] func(i T, o T) bool
 
 // ParamValidator is a wrapper for validator functions that accept additional parameters.
-type ParamValidator func(str string, params ...string) bool
+type ParamValidator[T ~string] func(str T, params ...string) bool
 
 // InterfaceParamValidator is a wrapper for functions that accept variants parameters for an interface value
-type InterfaceParamValidator func(in interface{}, params ...string) bool
+type InterfaceParamValidator[T any] func(in T, params ...string) bool
 
 type tagOptionsMap map[string]tagOption
 
@@ -51,8 +51,8 @@ type UnsupportedTypeError struct {
 type stringValues []reflect.Value
 
 // InterfaceParamTagMap is a map of functions accept variants parameters for an interface value
-var InterfaceParamTagMap = map[string]InterfaceParamValidator{
-	"type": IsType,
+var InterfaceParamTagMap = map[string]InterfaceParamValidator[any]{
+	"type": IsType[any],
 }
 
 // InterfaceParamTagRegexMap maps interface param tags to their respective regexes.
@@ -61,16 +61,16 @@ var InterfaceParamTagRegexMap = map[string]*regexp.Regexp{
 }
 
 // ParamTagMap is a map of functions accept variants parameters
-var ParamTagMap = map[string]ParamValidator{
-	"length":          ByteLength,
-	"range":           Range,
-	"runelength":      RuneLength,
-	"stringlength":    StringLength,
-	"matches":         StringMatches,
-	"in":              IsInRaw,
-	"rsapub":          IsRsaPub,
-	"minstringlength": MinStringLength,
-	"maxstringlength": MaxStringLength,
+var ParamTagMap = map[string]ParamValidator[string]{
+	"length":          ByteLength[string],
+	"range":           Range[string],
+	"runelength":      RuneLength[string],
+	"stringlength":    StringLength[string],
+	"matches":         StringMatches[string],
+	"in":              IsInRaw[string],
+	"rsapub":          IsRsaPub[string],
+	"minstringlength": MinStringLength[string],
+	"maxstringlength": MaxStringLength[string],
 }
 
 // ParamTagRegexMap maps param tags to their respective regexes.
@@ -86,20 +86,20 @@ var ParamTagRegexMap = map[string]*regexp.Regexp{
 	"maxstringlength": regexp.MustCompile("^maxstringlength\\((\\d+)\\)$"),
 }
 
-type customTypeTagMap struct {
-	validators map[string]CustomTypeValidator
+type customTypeTagMap[T any] struct {
+	validators map[string]CustomTypeValidator[T]
 
 	sync.RWMutex
 }
 
-func (tm *customTypeTagMap) Get(name string) (CustomTypeValidator, bool) {
+func (tm *customTypeTagMap[T]) Get(name string) (CustomTypeValidator[T], bool) {
 	tm.RLock()
 	defer tm.RUnlock()
 	v, ok := tm.validators[name]
 	return v, ok
 }
 
-func (tm *customTypeTagMap) Set(name string, ctv CustomTypeValidator) {
+func (tm *customTypeTagMap[T]) Set(name string, ctv CustomTypeValidator[T]) {
 	tm.Lock()
 	defer tm.Unlock()
 	tm.validators[name] = ctv
@@ -108,65 +108,65 @@ func (tm *customTypeTagMap) Set(name string, ctv CustomTypeValidator) {
 // CustomTypeTagMap is a map of functions that can be used as tags for ValidateStruct function.
 // Use this to validate compound or custom types that need to be handled as a whole, e.g.
 // `type UUID [16]byte` (this would be handled as an array of bytes).
-var CustomTypeTagMap = &customTypeTagMap{validators: make(map[string]CustomTypeValidator)}
+var CustomTypeTagMap = &customTypeTagMap[any]{validators: make(map[string]CustomTypeValidator[any])}
 
 // TagMap is a map of functions, that can be used as tags for ValidateStruct function.
-var TagMap = map[string]Validator{
-	"email":              IsEmail,
-	"url":                IsURL,
-	"dialstring":         IsDialString,
-	"requrl":             IsRequestURL,
-	"requri":             IsRequestURI,
-	"alpha":              IsAlpha,
-	"utfletter":          IsUTFLetter,
-	"alphanum":           IsAlphanumeric,
-	"utfletternum":       IsUTFLetterNumeric,
-	"numeric":            IsNumeric,
-	"utfnumeric":         IsUTFNumeric,
-	"utfdigit":           IsUTFDigit,
-	"hexadecimal":        IsHexadecimal,
-	"hexcolor":           IsHexcolor,
-	"rgbcolor":           IsRGBcolor,
-	"lowercase":          IsLowerCase,
-	"uppercase":          IsUpperCase,
-	"int":                IsInt,
-	"float":              IsFloat,
-	"null":               IsNull,
-	"notnull":            IsNotNull,
-	"uuid":               IsUUID,
-	"uuidv3":             IsUUIDv3,
-	"uuidv4":             IsUUIDv4,
-	"uuidv5":             IsUUIDv5,
-	"creditcard":         IsCreditCard,
-	"isbn10":             IsISBN10,
-	"isbn13":             IsISBN13,
-	"json":               IsJSON,
-	"multibyte":          IsMultibyte,
-	"ascii":              IsASCII,
-	"printableascii":     IsPrintableASCII,
-	"fullwidth":          IsFullWidth,
-	"halfwidth":          IsHalfWidth,
-	"variablewidth":      IsVariableWidth,
-	"base64":             IsBase64,
-	"datauri":            IsDataURI,
-	"ip":                 IsIP,
-	"port":               IsPort,
-	"ipv4":               IsIPv4,
-	"ipv6":               IsIPv6,
-	"dns":                IsDNSName,
-	"host":               IsHost,
-	"mac":                IsMAC,
-	"latitude":           IsLatitude,
-	"longitude":          IsLongitude,
-	"ssn":                IsSSN,
-	"semver":             IsSemver,
-	"rfc3339":            IsRFC3339,
-	"rfc3339WithoutZone": IsRFC3339WithoutZone,
-	"ISO3166Alpha2":      IsISO3166Alpha2,
-	"ISO3166Alpha3":      IsISO3166Alpha3,
-	"ISO4217":            IsISO4217,
-	"IMEI":               IsIMEI,
-	"ulid":               IsULID,
+var TagMap = map[string]Validator[string]{
+	"email":              IsEmail[string],
+	"url":                IsURL[string],
+	"dialstring":         IsDialString[string],
+	"requrl":             IsRequestURL[string],
+	"requri":             IsRequestURI[string],
+	"alpha":              IsAlpha[string],
+	"utfletter":          IsUTFLetter[string],
+	"alphanum":           IsAlphanumeric[string],
+	"utfletternum":       IsUTFLetterNumeric[string],
+	"numeric":            IsNumeric[string],
+	"utfnumeric":         IsUTFNumeric[string],
+	"utfdigit":           IsUTFDigit[string],
+	"hexadecimal":        IsHexadecimal[string],
+	"hexcolor":           IsHexcolor[string],
+	"rgbcolor":           IsRGBcolor[string],
+	"lowercase":          IsLowerCase[string],
+	"uppercase":          IsUpperCase[string],
+	"int":                IsInt[string],
+	"float":              IsFloat[string],
+	"null":               IsNull[string],
+	"notnull":            IsNotNull[string],
+	"uuid":               IsUUID[string],
+	"uuidv3":             IsUUIDv3[string],
+	"uuidv4":             IsUUIDv4[string],
+	"uuidv5":             IsUUIDv5[string],
+	"creditcard":         IsCreditCard[string],
+	"isbn10":             IsISBN10[string],
+	"isbn13":             IsISBN13[string],
+	"json":               IsJSON[string],
+	"multibyte":          IsMultibyte[string],
+	"ascii":              IsASCII[string],
+	"printableascii":     IsPrintableASCII[string],
+	"fullwidth":          IsFullWidth[string],
+	"halfwidth":          IsHalfWidth[string],
+	"variablewidth":      IsVariableWidth[string],
+	"base64":             IsBase64[string],
+	"datauri":            IsDataURI[string],
+	"ip":                 IsIP[string],
+	"port":               IsPort[string],
+	"ipv4":               IsIPv4[string],
+	"ipv6":               IsIPv6[string],
+	"dns":                IsDNSName[string],
+	"host":               IsHost[string],
+	"mac":                IsMAC[string],
+	"latitude":           IsLatitude[string],
+	"longitude":          IsLongitude[string],
+	"ssn":                IsSSN[string],
+	"semver":             IsSemver[string],
+	"rfc3339":            IsRFC3339[string],
+	"rfc3339WithoutZone": IsRFC3339WithoutZone[string],
+	"ISO3166Alpha2":      IsISO3166Alpha2[string],
+	"ISO3166Alpha3":      IsISO3166Alpha3[string],
+	"ISO4217":            IsISO4217[string],
+	"IMEI":               IsIMEI[string],
+	"ulid":               IsULID[string],
 }
 
 // ISO3166Entry stores country codes
