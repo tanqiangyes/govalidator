@@ -224,7 +224,7 @@ func TestUnderscoreToCamelCase(t *testing.T) {
 	}{
 		{"a_b_c", "ABC"},
 		{"my_func", "MyFunc"},
-		{"1ab_cd", "1abCd"},
+		{"1ab_cd", "1AbCd"},
 	}
 	for _, test := range tests {
 		actual := UnderscoreToCamelCase(test.param)
