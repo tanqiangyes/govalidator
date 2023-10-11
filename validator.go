@@ -1116,17 +1116,17 @@ func ValidateMap(s map[string]interface{}, m map[string]interface{}) (bool, erro
 // ValidateStruct use tags for fields.
 // result will be equal to `false` if there are any errors.
 // todo currently there is no guarantee that errors will be returned in predictable order (tests may to fail)
-func ValidateStruct(s interface{}) (bool, error) {
-	if s == nil {
+func ValidateStruct[T any](s T) (bool, error) {
+	if reflect.ValueOf(s) == reflect.ValueOf(nil) {
 		return true, nil
 	}
 	result := true
 	var err error
+	// we only accept structs
 	val := reflect.ValueOf(s)
 	if val.Kind() == reflect.Interface || val.Kind() == reflect.Ptr {
 		val = val.Elem()
 	}
-	// we only accept structs
 	if val.Kind() != reflect.Struct {
 		return false, fmt.Errorf("function only accepts structs; got %s", val.Kind())
 	}
@@ -1185,7 +1185,7 @@ func ValidateStruct(s interface{}) (bool, error) {
 }
 
 // ValidateStructAsync performs async validation of the struct and returns results through the channels
-func ValidateStructAsync(s interface{}) (<-chan bool, <-chan error) {
+func ValidateStructAsync[T any](s T) (<-chan bool, <-chan error) {
 	res := make(chan bool)
 	errors := make(chan error)
 

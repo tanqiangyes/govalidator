@@ -25,9 +25,8 @@ func BenchmarkEach(b *testing.B) {
 	data := randomArray(1000000)
 	b.ResetTimer()
 	for n := 0; n < b.N; n++ {
-		acc := 0
 		var fn Iterator[int] = func(value int, index int) {
-			acc = acc + value
+			value = value + index
 		}
 		Each(data, fn)
 	}
