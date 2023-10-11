@@ -75,8 +75,8 @@ var ParamTagMap = map[string]ParamValidator[string]{
 
 // ParamTagRegexMap maps param tags to their respective regexes.
 var ParamTagRegexMap = map[string]*regexp.Regexp{
-	"range":           regexp.MustCompile("^range\\((\\d+(?:.\\d+)?)\\|(\\d+(?:.\\d+)?)\\)$"),
-	"length":          regexp.MustCompile("^length\\((\\d+)\\|(\\d+)\\)$"),
+	"range":           regexp.MustCompile(`^range\\((\\d+(?:.\\d+)?)\\|(\\d+(?:.\\d+)?)\\)$`),
+	"length":          regexp.MustCompile(`^length\\((\\d+)\\|(\\d+)\\)$`),
 	"runelength":      regexp.MustCompile("^runelength\\((\\d+)\\|(\\d+)\\)$"),
 	"stringlength":    regexp.MustCompile("^stringlength\\((\\d+)\\|(\\d+)\\)$"),
 	"in":              regexp.MustCompile(`^in\((.*)\)`),

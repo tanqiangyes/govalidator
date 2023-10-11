@@ -3513,22 +3513,22 @@ func TestValidateStructParamValidatorInt(t *testing.T) {
 		t.Errorf("Test failed: nil")
 	}
 
-	type Test3 struct {
-		Int   int   `valid:"in(1|10),int"`
-		Int8  int8  `valid:"in(1|10),int8"`
-		Int16 int16 `valid:"in(1|10),int16"`
-		Int32 int32 `valid:"in(1|10),int32"`
-		Int64 int64 `valid:"in(1|10),int64"`
-
-		Uint   uint   `valid:"in(1|10),uint"`
-		Uint8  uint8  `valid:"in(1|10),uint8"`
-		Uint16 uint16 `valid:"in(1|10),uint16"`
-		Uint32 uint32 `valid:"in(1|10),uint32"`
-		Uint64 uint64 `valid:"in(1|10),uint64"`
-
-		Float32 float32 `valid:"in(1|10),float32"`
-		Float64 float64 `valid:"in(1|10),float64"`
-	}
+	// type Test3 struct {
+	// 	Int   int   `valid:"in(1|10),int"`
+	// 	Int8  int8  `valid:"in(1|10),int8"`
+	// 	Int16 int16 `valid:"in(1|10),int16"`
+	// 	Int32 int32 `valid:"in(1|10),int32"`
+	// 	Int64 int64 `valid:"in(1|10),int64"`
+	//
+	// 	Uint   uint   `valid:"in(1|10),uint"`
+	// 	Uint8  uint8  `valid:"in(1|10),uint8"`
+	// 	Uint16 uint16 `valid:"in(1|10),uint16"`
+	// 	Uint32 uint32 `valid:"in(1|10),uint32"`
+	// 	Uint64 uint64 `valid:"in(1|10),uint64"`
+	//
+	// 	Float32 float32 `valid:"in(1|10),float32"`
+	// 	Float64 float64 `valid:"in(1|10),float64"`
+	// }
 
 	test3Ok1 := &Test2{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
 	test3Ok2 := &Test2{10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10}

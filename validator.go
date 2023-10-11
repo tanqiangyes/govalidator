@@ -25,9 +25,9 @@ import (
 var (
 	fieldsRequiredByDefault bool
 	nilPtrAllowedByRequired = false
-	notNumberRegexp         = regexp.MustCompile("[^0-9]+")
-	whiteSpacesAndMinus     = regexp.MustCompile(`[\s-]+`)
-	paramsRegexp            = regexp.MustCompile(`\(.*\)$`)
+	// notNumberRegexp         = regexp.MustCompile("[^0-9]+")
+	whiteSpacesAndMinus = regexp.MustCompile(`[\s-]+`)
+	paramsRegexp        = regexp.MustCompile(`\(.*\)$`)
 )
 
 const maxURLRuneCount = 2083
@@ -612,20 +612,14 @@ func IsWinFilePath[T ~string](str T) bool {
 	if rxARWinPath.MatchString(string(str)) {
 		// check windows path limit see:
 		//  http://msdn.microsoft.com/en-us/library/aa365247(VS.85).aspx#maxpath
-		if len(str[3:]) > 32767 {
-			return false
-		}
-		return true
+		return len(str[3:]) <= 32767
 	}
 	return false
 }
 
 // IsUnixFilePath checks both relative & absolute paths in Unix
 func IsUnixFilePath[T ~string](str T) bool {
-	if rxARUnixPath.MatchString(string(str)) {
-		return true
-	}
-	return false
+	return rxARUnixPath.MatchString(string(str))
 }
 
 // IsDataURI checks if a string is base64 encoded data URI such as an image
