@@ -1163,11 +1163,13 @@ func ValidateStruct[T any](s T) (bool, error) {
 					err2 = jsonError
 				case Errors:
 					for i2, err3 := range jsonError {
+						//revive:disable
 						switch customErr := err3.(type) {
 						case Error:
 							customErr.Name = jsonTag
 							jsonError[i2] = customErr
 						}
+						//revive:enable
 					}
 
 					err2 = jsonError

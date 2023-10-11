@@ -2480,7 +2480,7 @@ type UserValid struct {
 }
 
 type PrivateStruct struct {
-	privateField string `valid:"required,alpha,d_k"`
+	privateField string `valid:"required,alpha,d_k"` // revive:disable-line
 	NonZero      int
 	ListInt      []int
 	ListString   []string `valid:"alpha"`
@@ -2726,7 +2726,7 @@ func TestStructWithCustomByteArray(t *testing.T) {
 		default:
 			t.Errorf("Context object passed to custom validator should have been a StructWithCustomByteArray but was %T (%+v)", o, o)
 		}
-
+		//revive:disable
 		switch v := i.(type) {
 		case CustomByteArray:
 			for _, e := range v { // checks if v is empty, i.e. all zeroes
@@ -2735,13 +2735,16 @@ func TestStructWithCustomByteArray(t *testing.T) {
 				}
 			}
 		}
+		//revive:enable
 		return false
 	}))
 	CustomTypeTagMap.Set("customMinLengthValidator", CustomTypeValidator[any](func(i interface{}, o interface{}) bool {
+		//revive:disable
 		switch v := o.(type) {
 		case StructWithCustomByteArray:
 			return len(v.ID) >= v.CustomMinLength
 		}
+		//revive:enable
 		return false
 	}))
 	testCustomByteArray := CustomByteArray{'1', '2', '3', '4', '5', '6'}
@@ -3561,7 +3564,7 @@ func TestValidateStructUpperAndLowerCaseWithNumTypeCheck(t *testing.T) {
 	}
 
 	type StructLower struct {
-		total float32 `valid:"float,required"`
+		total float32 `valid:"float,required"` // revive:disable-line
 	}
 
 	structLower := &StructLower{53.3535}
