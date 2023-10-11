@@ -1776,6 +1776,7 @@ func (sv stringValues) Less(i, j int) bool { return sv.get(i) < sv.get(j) }
 
 func (sv stringValues) get(i int) string { return sv[i].String() }
 
+// IsE164 returns true if is E164
 func IsE164[T ~string](str T) bool {
 	return rxE164.MatchString(string(str))
 }

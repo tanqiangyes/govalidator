@@ -2531,7 +2531,7 @@ type FieldRequiredByDefault struct {
 }
 
 type MultipleFieldsRequiredByDefault struct {
-	Url   string `valid:"url"`
+	URL   string `valid:"url"`
 	Email string `valid:"email"`
 }
 

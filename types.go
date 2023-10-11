@@ -77,13 +77,13 @@ var ParamTagMap = map[string]ParamValidator[string]{
 var ParamTagRegexMap = map[string]*regexp.Regexp{
 	"range":           regexp.MustCompile(`^range\\((\\d+(?:.\\d+)?)\\|(\\d+(?:.\\d+)?)\\)$`),
 	"length":          regexp.MustCompile(`^length\\((\\d+)\\|(\\d+)\\)$`),
-	"runelength":      regexp.MustCompile("^runelength\\((\\d+)\\|(\\d+)\\)$"),
-	"stringlength":    regexp.MustCompile("^stringlength\\((\\d+)\\|(\\d+)\\)$"),
+	"runelength":      regexp.MustCompile(`^runelength\\((\\d+)\\|(\\d+)\\)$`),
+	"stringlength":    regexp.MustCompile(`^stringlength\\((\\d+)\\|(\\d+)\\)$`),
 	"in":              regexp.MustCompile(`^in\((.*)\)`),
 	"matches":         regexp.MustCompile(`^matches\((.+)\)$`),
-	"rsapub":          regexp.MustCompile("^rsapub\\((\\d+)\\)$"),
-	"minstringlength": regexp.MustCompile("^minstringlength\\((\\d+)\\)$"),
-	"maxstringlength": regexp.MustCompile("^maxstringlength\\((\\d+)\\)$"),
+	"rsapub":          regexp.MustCompile(`^rsapub\\((\\d+)\\)$`),
+	"minstringlength": regexp.MustCompile(`^minstringlength\\((\\d+)\\)$`),
+	"maxstringlength": regexp.MustCompile(`^maxstringlength\\((\\d+)\\)$`),
 }
 
 type customTypeTagMap[T any] struct {
